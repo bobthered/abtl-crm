@@ -1,16 +1,18 @@
 <script>
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
-	import { Header, Nav, Pwa, Title } from 'sveltewind/components';
+	import { forms } from '$lib/stores';
+	import { Header, Modal, Nav, ProgressIndicator, Pwa, Title } from 'sveltewind/components';
 	import { theme } from 'sveltewind/stores';
 	import { sveltewind } from 'sveltewind/themes';
 	import { twMerge } from 'tailwind-merge';
 	import '../app.css';
 
 	// props (internal)
-
-	// props (reactive)
-	$: navMap = new Map([['/create-interaction', 'Create Interaction']]);
+	const navMap = new Map([
+		['/contact', 'Contact'],
+		['/interaction', 'Interaction']
+	]);
 
 	// set theme
 	theme.set(sveltewind);
@@ -63,3 +65,7 @@
 		<slot></slot>
 	</div>
 </div>
+
+<Modal bind:isOpen={$forms.loading}>
+	<ProgressIndicator />
+</Modal>

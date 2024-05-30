@@ -20,16 +20,12 @@ export const actions = {
 	}
 };
 export const load = async () => {
-	const [customers, types] = await Promise.all([
-		prisma.customer.findMany({
-			orderBy: [{ description: 'asc' }],
-			select: { id: true, contacts: true, description: true, number: true }
-		}),
+	const [types] = await Promise.all([
 		prisma.customerInteractionType.findMany({
 			orderBy: [{ description: 'asc' }],
 			select: { id: true, description: true }
 		})
 	]);
 
-	return { customers, types };
+	return { types };
 };
