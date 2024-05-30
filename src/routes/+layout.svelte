@@ -10,13 +10,7 @@
 	// props (internal)
 
 	// props (reactive)
-	$: navMap = new Map([
-		// ['/calculate-margin', 'Calculate Margin'],
-		// ['/new-margins', 'New Margins'],
-		// ['/quote', 'Quote']
-		// [`/quote-finder?${new URLSearchParams(queryParams).toString()}`, 'Quote Finder']
-		// ['/repeat', 'Repeat']
-	]);
+	$: navMap = new Map([['/create-interaction', 'Create Interaction']]);
 
 	// set theme
 	theme.set(sveltewind);
@@ -58,8 +52,10 @@
 						'px-6 py-3 transition duration-200',
 						$page.url.pathname === href ? 'bg-primary-600' : undefined
 					)}
-					{href}>{label}</a
+					{href}
 				>
+					{label}
+				</a>
 			{/each}
 		</Nav>
 	</Header>

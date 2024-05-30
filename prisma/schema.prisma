@@ -14,30 +14,65 @@ datasource db {
 }
 
 model Customer {
-  id             String            @id @default(auto()) @map("_id") @db.ObjectId
+  id             String                @id @default(auto()) @map("_id") @db.ObjectId
   city           String
+  contactIds     String[]              @default([]) @db.ObjectId
+  contacts       CustomerContact[]
   description    String
-  phone          Int
-  phoneExtension String
-  number         Int
-  state          String
-  statusId       String            @db.ObjectId
-  status         CustomerStatus    @relation(fields: [statusId], references: [id])
-  territoryId    String            @db.ObjectId
-  territory      CustomerTerritory @relation(fields: [territoryId], references: [id])
-  zip            String
+  interactionIds String[]              @db.ObjectId
+  interactions   CustomerInteraction[]
+  phone          Int                   @default(9999999999)
+  phoneExtension Int                   @default(0)
+  number         Int                   @unique
+  state          String                @default("")
+  statusId       String                @db.ObjectId
+  status         CustomerStatus        @relation(fields: [statusId], references: [id])
+  territoryId    String                @db.ObjectId
+  territory      CustomerTerritory     @relation(fields: [territoryId], references: [id])
+  zip            String                @default("")
+}
+
+model CustomerContact {
+  id                     String                @id @default(auto()) @map("_id") @db.ObjectId
+  customerId             String                @db.ObjectId
+  customer               Customer              @relation(fields: [customerId], references: [id])
+  customerInteractionIds String[]              @db.ObjectId
+  customerInteractions   CustomerInteraction[]
+  email                  String                @default("")
+  name                   String                @default("")
+  phone                  Int                   @default(9999999999)
+  phoneExtension         Int                   @default(0)
+}
+
+model CustomerInteraction {
+  id         String                   @id @default(auto()) @map("_id") @db.ObjectId
+  contactId  String                   @db.ObjectId
+  contact    CustomerContact?         @relation(fields: [contactId], references: [id])
+  customerId String                   @db.ObjectId
+  customer   Customer?                @relation(fields: [customerId], references: [id])
+  date       DateTime                 @default(now())
+  detail     String                   @default("")
+  typeId     String                   @db.ObjectId
+  type       CustomerInteractionType? @relation(fields: [typeId], references: [id])
+}
+
+model CustomerInteractionType {
+  id             String                @id @default(auto()) @map("_id") @db.ObjectId
+  description    String                @unique @default("")
+  interactionIds String[]              @db.ObjectId
+  interactions   CustomerInteraction[]
 }
 
 model CustomerStatus {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   customerIds String[]   @db.ObjectId
   customers   Customer[]
-  description String
+  description String     @unique @default("")
 }
 
 model CustomerTerritory {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   customerIds String[]   @db.ObjectId
   customers   Customer[]
-  description String
+  description String     @unique @default("")
 }
